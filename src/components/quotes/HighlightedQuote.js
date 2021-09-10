@@ -1,10 +1,10 @@
-import classes from './HighlightedQuote.module.css';
+import classes from "./HighlightedQuote.module.css";
 
-const HighlightedQuote = (props) => {
+const HighlightedQuote = ({ quote }) => {
   return (
     <figure className={classes.quote}>
-      <p>{props.text}</p>
-      <figcaption>{props.author}</figcaption>
+      <p>{quote.text}</p>
+      <figcaption>{quote.author}</figcaption>
     </figure>
   );
 };
