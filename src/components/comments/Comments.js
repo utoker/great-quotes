@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 import { useParams } from "react-router";
 import useHttp from "../../hooks/use-http";
 import { getAllComments } from "../../lib/api";
@@ -6,23 +6,25 @@ import LoadingSpinner from "../UI/LoadingSpinner";
 import classes from "./Comments.module.css";
 import NewCommentForm from "./NewCommentForm";
 import CommentsList from "./CommentsList";
-import { useCallback } from "react";
 
 const Comments = () => {
+  const [isAddingComment, setIsAddingComment] = useState(false);
   const params = useParams();
   const { quoteId } = params;
-  const [isAddingComment, setIsAddingComment] = useState(false);
+
+  const { sendRequest, status, data: loadedComments } = useHttp(getAllComments);
+
+  useEffect(() => {
+    sendRequest(quoteId);
+  }, [quoteId, sendRequest]);
+
   const startAddCommentHandler = () => {
     setIsAddingComment(true);
   };
 
-  const { sendRequest, status, data: loadedComments } = useHttp(getAllComments);
   const addedCommentHandler = useCallback(() => {
-    sendRequest({ quoteId });
-  }, [sendRequest, quoteId]);
-  useEffect(() => {
     sendRequest(quoteId);
-  }, [quoteId, sendRequest]);
+  }, [sendRequest, quoteId]);
 
   let comments;
 
@@ -33,7 +35,7 @@ const Comments = () => {
       </div>
     );
   }
-  if (status === "completed" && loadedComments && loadedComments.length) {
+  if (status === "completed" && loadedComments && loadedComments.length > 0) {
     comments = <CommentsList comments={loadedComments} />;
   }
   if (

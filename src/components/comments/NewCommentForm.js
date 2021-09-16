@@ -1,14 +1,12 @@
-import { useRef } from "react";
-import { useEffect } from "react/cjs/react.development";
+import { useRef, useEffect } from "react";
 import useHttp from "../../hooks/use-http";
 import { addComment } from "../../lib/api";
 import LoadingSpinner from "../UI/LoadingSpinner";
-
 import classes from "./NewCommentForm.module.css";
 
 const NewCommentForm = ({ onAddComment, quoteId }) => {
   const commentTextRef = useRef();
-  const { sendRequest, status, data, error } = useHttp(addComment);
+  const { sendRequest, status, error } = useHttp(addComment);
 
   useEffect(() => {
     if (status === "completed" && !error) {
@@ -21,7 +19,7 @@ const NewCommentForm = ({ onAddComment, quoteId }) => {
     // optional: Could validate here
 
     const enteredText = commentTextRef.current.value;
-    sendRequest({ commentdata: { text: enteredText }, quoteId });
+    sendRequest({ commentData: { text: enteredText }, quoteId });
   };
 
   return (
