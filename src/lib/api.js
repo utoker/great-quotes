@@ -1,6 +1,4 @@
-import configURL from "./config";
-
-const FIREBASE_DOMAIN = configURL;
+const FIREBASE_DOMAIN = process.env.REACT_APP_URL;
 
 export async function getAllQuotes() {
   const response = await fetch(`${FIREBASE_DOMAIN}/quotes.json`);
